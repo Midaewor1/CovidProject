@@ -1,14 +1,14 @@
 # 📊 COVID-19 Data Exploration with SQL
 
 ## 📌 Project Overview
-This project explores global COVID-19 data using SQL queries in **MySQL Workbench**.  
+This project explores **global COVID-19 data** using SQL queries in **MySQL Workbench**.  
 The goal is to showcase my ability to:
-- Clean and structure real-world datasets
-- Write efficient SQL queries
-- Perform analytical calculations
-- Present insights that answer meaningful business/health questions
+- Clean and structure real-world datasets  
+- Write efficient SQL queries  
+- Perform analytical calculations  
+- Present insights that answer meaningful business/health questions  
 
-Data comes from publicly available COVID-19 datasets (e.g., Our World in Data).
+Data source: *Our World in Data (OWID) — COVID-19 dataset*
 
 ---
 
@@ -16,7 +16,7 @@ Data comes from publicly available COVID-19 datasets (e.g., Our World in Data).
 - **Database**: MySQL  
 - **IDE**: MySQL Workbench  
 - **Language**: SQL  
-- **Dataset**: COVID deaths and vaccination data  
+- **Dataset**: COVID deaths & vaccination data  
 
 ---
 
@@ -24,58 +24,74 @@ Data comes from publicly available COVID-19 datasets (e.g., Our World in Data).
 
 ### 1️⃣ Global Totals and Mortality Rate
 ```sql
-Select SUM(new_cases) AS totalcases,
+SELECT SUM(new_cases) AS totalcases,
        SUM(new_deaths) AS totaldeaths,
        SUM(new_deaths) / SUM(new_cases) * 100 AS DeathPercentage
 FROM coviddeathsdata_clean
-Where continent is not null
-order by 1,2;
-Purpose:
-Calculates worldwide totals of cases and deaths, plus the overall mortality rate (% of cases that resulted in death).
-Insight:
-Helps understand the global severity of COVID-19.
+WHERE continent IS NOT NULL
+ORDER BY 1,2;
+
+
 2️⃣ Countries Ranked by Total Deaths
-Select location, SUM(cast(new_deaths as SIGNED)) as TotalDeathCount
-From coviddeathsdata_clean
-Where continent is null
-and location not in ('World', 'European Union', 'International')
-Group by location
-order by TotalDeathCount desc;
-Purpose:
-Ranks individual countries by their cumulative death counts (excludes aggregate rows like World or European Union).
-Insight:
-Identifies the countries most heavily impacted in terms of raw death counts.
+SELECT location, SUM(CAST(new_deaths AS SIGNED)) AS TotalDeathCount
+FROM coviddeathsdata_clean
+WHERE continent IS NULL
+  AND location NOT IN ('World', 'European Union', 'International')
+GROUP BY location
+ORDER BY TotalDeathCount DESC;
+Insight: Ranks countries by cumulative death count while excluding world/region aggregates.
+
+
+
 3️⃣ Countries Ranked by Infection Rate
-Select Location, Population, MAX(total_cases) as HighestInfectionCount, 
-       MAX((total_cases / population)) * 100 as PercentPopulationInfected
+SELECT Location, Population, 
+       MAX(total_cases) AS HighestInfectionCount, 
+       MAX((total_cases / population)) * 100 AS PercentPopulationInfected
 FROM coviddeathsdata_clean
-Group by Location, Population
-order by PercentPopulationInfected desc;
-Purpose:
-Compares the total number of cases to each country’s population, showing % of population infected at the peak.
-Insight:
-Reveals countries with the highest infection penetration relative to their population size.
+GROUP BY Location, Population
+ORDER BY PercentPopulationInfected DESC;
+Insight: Compares cases vs. population to show the percentage of the population infected at peak levels.
+
+
 4️⃣ Infection Rate Over Time
-Select Location, Population, date, 
-       MAX(total_cases) as HighestInfectionCount, 
-       MAX((total_cases / population)) * 100 as PercentPopulationInfected
+SELECT Location, Population, date, 
+       MAX(total_cases) AS HighestInfectionCount, 
+       MAX((total_cases / population)) * 100 AS PercentPopulationInfected
 FROM coviddeathsdata_clean
-Group by Location, Population, date
-order by PercentPopulationInfected desc;
-Purpose:
-Extends the infection rate analysis to include dates, giving a timeline of peak infection rates per country.
-Insight:
-Shows when each country experienced its worst outbreaks, providing a historical progression.
+GROUP BY Location, Population, date
+ORDER BY PercentPopulationInfected DESC;
+Insight: Tracks infection rate by country and date, showing peak infection levels over time.
+
+
 🚀 Key Skills Demonstrated
-Using aggregate functions (SUM, MAX) for analytics
-Applying window functions for rolling calculations
-Handling data cleaning (CAST, filtering out NULL/aggregate rows)
-Performing comparative analysis across countries and continents
-Organizing queries for clear, business-focused insights
+Aggregate functions (SUM, MAX)
+Data cleaning (CAST, filtering NULLs, excluding aggregates)
+Comparative analysis across countries and continents
+Producing clear, business-relevant insights from raw data
+
+
 📈 Next Steps
-Add visualizations (e.g., Tableau/Power BI dashboards) to make trends more accessible
-Incorporate vaccination data to compare infection rates vs. vaccination progress
-Automate ETL (Extract, Transform, Load) for updated COVID datasets
+Add visualizations (Tableau/Power BI)
+Extend analysis with vaccination progress vs. infection rates
+Build an ETL pipeline for automated updates
+
+
 🙋 About Me
-I am building a strong foundation in data analytics and SQL development, with the goal of applying my skills to solve real-world problems. This project demonstrates my ability to explore raw data, clean it, and extract insights valuable for decision-making.
-👉 If you’d like to connect, check out my LinkedIn or reach out directly!
+I am building strong skills in SQL, data analytics, and business intelligence.
+This project demonstrates my ability to work with real-world data, write optimized queries, and derive actionable insights.
+👉 Connect with me on LinkedIn or check out more of my work here on GitHub!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
